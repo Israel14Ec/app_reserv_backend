@@ -12,9 +12,9 @@ export class ServiciosController {
     return this.serviciosService.create(createServicioDto);
   }
 
-  @Get()
-  findAll() {
-    return this.serviciosService.findAll();
+  @Get('by-profesional/:id_profesional')
+  findAll(@Param('id_profesional') id_profesional: number) {
+    return this.serviciosService.findAllByProfesional(id_profesional);
   }
 
   @Get(':id')

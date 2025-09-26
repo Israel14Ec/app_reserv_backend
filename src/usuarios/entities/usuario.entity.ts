@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Paciente } from "src/pacientes/entities/paciente.entity";
+import { Profesional } from "src/profesionales/entities/profesionale.entity";
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Usuario {
@@ -27,5 +29,11 @@ export class Usuario {
     @UpdateDateColumn()
     updatedAt: string;
 
+    //Inversa de la relacion 1 a 1 con profesional
+    @OneToOne(() => Profesional, profesional => profesional.usuario)
+    prefesional: Profesional;
 
+    //Inversa de la relacion 1 a 1 con paciente
+    @OneToOne(() =>Profesional, profesional => profesional.usuario)
+    paciente: Paciente;
 }

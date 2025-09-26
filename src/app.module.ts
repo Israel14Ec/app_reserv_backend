@@ -7,7 +7,6 @@ import { ProfesionalesModule } from './profesionales/profesionales.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailsModule } from './emails/emails.module';
-import { ProfesionalModule } from './profesional/profesional.module';
 import { PacientesModule } from './pacientes/pacientes.module';
 
 @Module({
@@ -33,7 +32,6 @@ import { PacientesModule } from './pacientes/pacientes.module';
     ProfesionalesModule,
     AuthModule,
     EmailsModule,
-    ProfesionalModule,
     PacientesModule,
   ],
   controllers: [],

@@ -1,26 +1,85 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Paciente } from './entities/paciente.entity';
+import { Repository } from 'typeorm';
+import { UsuariosService } from 'src/usuarios/usuarios.service';
 
 @Injectable()
 export class PacientesService {
-  create(createPacienteDto: CreatePacienteDto) {
-    return 'This action adds a new paciente';
+  constructor(
+    @InjectRepository(Paciente)
+    private readonly pacienteService: Repository<Paciente>,
+    private readonly usuarioService: UsuariosService,
+  ) {}
+
+  async create(createPacienteDto: CreatePacienteDto) {
+    const { name, email, password, celular, ...rest } = createPacienteDto;
+    const newUser = await this.usuarioService.create({
+      name,
+      email,
+      password,
+      celular,
+    });
+
+    const paciente = await this.pacienteService.save({
+      ...rest,
+      usuario: { id: newUser.data.id },
+    });
+
+    return {
+      message: 'Cuenta de paciente creado correctamente',
+      data: {
+        paciente,
+        usuario: newUser.data,
+      },
+    };
   }
 
-  findAll() {
-    return `This action returns all pacientes`;
+  async pacienteByUserId(id: number) {
+    const paciente = await this.pacienteService.findOne({
+      where: { usuario: { id } },
+    });
+
+    if (!paciente) {
+      throw new NotFoundException(
+        'No se encontro un profesional con ese ID de usuario',
+      );
+    }
+
+    return paciente;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paciente`;
+  async pacienteById(id: number) {
+    const paciente = await this.pacienteService.findOneBy({ id });
+
+    if (!paciente) {
+      throw new NotFoundException('No se encontro un paciente con ese ID');
+    }
+    return paciente;
   }
 
-  update(id: number, updatePacienteDto: UpdatePacienteDto) {
-    return `This action updates a #${id} paciente`;
-  }
+  async update(id: number, updatePacienteDto: UpdatePacienteDto) {
+    const { name, celular, ...rest } = updatePacienteDto;
+    const paciente = await this.pacienteById(id);
 
-  remove(id: number) {
-    return `This action removes a #${id} paciente`;
+    // Actualizar usuario
+    await this.usuarioService.update(paciente.usuario.id, {
+      name,
+      celular,
+    });
+
+    // Actualizar paciente
+    Object.assign(paciente, rest);
+    const updatedProfesional = await this.pacienteService.save(paciente);
+
+    return {
+      message: 'Paciente actualizado correctamente',
+      data: {
+        profesional: updatedProfesional,
+        usuario: updatedProfesional.usuario,
+      },
+    };
   }
 }

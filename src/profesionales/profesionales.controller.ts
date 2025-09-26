@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProfesionalesService } from './profesionales.service';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateProfesionaleDto } from './dto/create-profesionale.dto';
 import { UpdateProfesionaleDto } from './dto/update-profesionale.dto';
+import { ProfesionalesService } from './profesionales.service';
 
-@Controller('profesionales')
+@Controller('api/v1/profesionales')
 export class ProfesionalesController {
   constructor(private readonly profesionalesService: ProfesionalesService) {}
 
@@ -12,23 +12,13 @@ export class ProfesionalesController {
     return this.profesionalesService.create(createProfesionaleDto);
   }
 
-  @Get()
-  findAll() {
-    return this.profesionalesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profesionalesService.findOne(+id);
+  @Get('by-user/:id')
+  profesionalByUserId(@Param('id') id: string) {
+    return this.profesionalesService.profesionalByUserId(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProfesionaleDto: UpdateProfesionaleDto) {
     return this.profesionalesService.update(+id, updateProfesionaleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profesionalesService.remove(+id);
   }
 }

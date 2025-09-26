@@ -99,7 +99,11 @@ export class AuthService {
         secret: process.env.SECRET_JWT,
       });
 
-      const user = await this.usuarioRepository.findOneBy({ id: user_id });
+      const user = await this.usuarioRepository.findOne({ 
+          where: {
+            id: user_id 
+          }
+        });
 
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');

@@ -3,7 +3,7 @@ import { PacientesService } from './pacientes.service';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
 
-@Controller('pacientes')
+@Controller('api/v1/pacientes')
 export class PacientesController {
   constructor(private readonly pacientesService: PacientesService) {}
 
@@ -12,14 +12,9 @@ export class PacientesController {
     return this.pacientesService.create(createPacienteDto);
   }
 
-  @Get()
-  findAll() {
-    return this.pacientesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pacientesService.findOne(+id);
+  @Get('by-user/:id')
+  pacienteByUserId(@Param('id') id: string) {
+    return this.pacientesService.pacienteByUserId(+id);
   }
 
   @Patch(':id')
@@ -27,8 +22,4 @@ export class PacientesController {
     return this.pacientesService.update(+id, updatePacienteDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pacientesService.remove(+id);
-  }
 }
