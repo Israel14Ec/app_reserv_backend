@@ -26,7 +26,7 @@ export class Servicio {
   createdAt: string;
 
   @UpdateDateColumn()
-  deletedAt: string;
+  updatedAt: string;
 
   // Relación N a 1 con profesional
   @ManyToOne(() => Profesional, (profesional) => profesional.servicios)

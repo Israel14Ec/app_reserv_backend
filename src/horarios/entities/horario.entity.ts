@@ -11,13 +11,13 @@ import {
 } from 'typeorm';
 
 export enum DiasSemana {
-    LUNES = 'Lunes',
-    MARTES = 'Martes',
-    MIERCOLES = 'Miercoles',
-    JUEVES = 'Jueves',
-    VIERNES = 'Viernes',
-    SABADO = 'Sabado',
-    DOMINGO = 'Domingo',
+    LUNES = 'lunes',
+    MARTES = 'martes',
+    MIERCOLES = 'miercoles',
+    JUEVES = 'jueves',
+    VIERNES = 'viernes',
+    SABADO = 'sabado',
+    DOMINGO = 'domingo',
 }
 
 @Entity()
