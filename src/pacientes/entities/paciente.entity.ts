@@ -1,9 +1,11 @@
+import { Cita } from 'src/citas/entities/cita.entity';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -34,4 +36,8 @@ export class Paciente {
   @OneToOne(() => Usuario, (usuario) => usuario.id, { eager: true })
   @JoinColumn({ name: 'id_usuario'})
   usuario: Usuario;
+
+  //Relacion 1 a N con citas
+  @OneToMany(() => Cita, (cita) => cita.paciente)
+  citas: Cita[];
 }

@@ -12,5 +12,6 @@ import { ProfesionalesModule } from 'src/profesionales/profesionales.module';
   ],
   controllers: [ServiciosController],
   providers: [ServiciosService],
+  exports: [ServiciosService]
 })
 export class ServiciosModule {}

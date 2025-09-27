@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailsModule } from './emails/emails.module';
 import { PacientesModule } from './pacientes/pacientes.module';
+import { HorariosModule } from './horarios/horarios.module';
+import { CitasModule } from './citas/citas.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { PacientesModule } from './pacientes/pacientes.module';
     AuthModule,
     EmailsModule,
     PacientesModule,
+    HorariosModule,
+    CitasModule,
   ],
   controllers: [],
   providers: [],

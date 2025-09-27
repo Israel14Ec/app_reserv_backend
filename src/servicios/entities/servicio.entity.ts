@@ -1,3 +1,4 @@
+import { Cita } from 'src/citas/entities/cita.entity';
 import { Profesional } from 'src/profesionales/entities/profesionale.entity';
 import {
   Column,
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,4 +32,9 @@ export class Servicio {
   @ManyToOne(() => Profesional, (profesional) => profesional.servicios)
   @JoinColumn({ name: 'id_profesional' })
   profesional: Profesional;
+
+  //Relación 1 a N con citas
+  @OneToMany(() => Cita, (cita) => cita.servicio)
+  citas: Cita[];
+  
 }
