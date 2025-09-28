@@ -20,12 +20,14 @@ export class ProfesionalesService {
     password,
     celular,
     descripcion,
+    ci_ruc
   }: CreateProfesionaleDto) {
     const newUser = await this.usuarioService.create({
       name,
       email,
       password,
       celular,
+      ci_ruc
     });
 
     const profesional = await this.profesionalRepository.save({
@@ -47,17 +49,24 @@ export class ProfesionalesService {
       where: { usuario: { id } },
     });
 
-    if (!profesional) {
-      throw new NotFoundException(
-        'No se encontro un profesional con ese ID de usuario',
-      );
-    }
-
     return profesional;
   }
 
+  async getAllProfesional() {
+    return this.profesionalRepository.find({
+      relations: {
+        usuario: true
+      }
+    })
+  }
+
   async profesionalById(id: number) {
-    const profesional = await this.profesionalRepository.findOneBy({ id });
+    const profesional = await this.profesionalRepository.findOne({
+      where: { id },
+      relations: {
+        usuario: true
+      }
+    });
 
     if (!profesional) {
       throw new NotFoundException('No se encontro un profesional con ese ID');

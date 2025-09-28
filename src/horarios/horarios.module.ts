@@ -4,10 +4,11 @@ import { HorariosController } from './horarios.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Horario } from './entities/horario.entity';
 import { ProfesionalesModule } from 'src/profesionales/profesionales.module';
+import { Cita } from 'src/citas/entities/cita.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Horario]),
+    TypeOrmModule.forFeature([Horario, Cita]),
     ProfesionalesModule
   ],
   controllers: [HorariosController],

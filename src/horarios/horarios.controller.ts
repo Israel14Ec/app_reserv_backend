@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { HorariosService } from './horarios.service';
 import { CreateHorarioDto } from './dto/create-horario.dto';
 import { UpdateHorarioDto } from './dto/update-horario.dto';
+import { GetHorarioDisponibleDto } from './dto/get-horario-disponible.dto';
 
 @Controller('api/v1/horarios')
 export class HorariosController {
@@ -23,6 +25,12 @@ export class HorariosController {
   @Get('find-by-profesional/:idProfesional')
   findAll(@Param('idProfesional') idProfesional: string) {
     return this.horariosService.findAllByProfesional(+idProfesional);
+  }
+
+  @Get('horario-disponible')
+  findHorarioDisponible(@Query() horarioDto : GetHorarioDisponibleDto) {
+    const { idProfesional, fecha } = horarioDto
+    return this.horariosService.getHorariosDisponibles(+idProfesional, fecha);
   }
 
   @Get(':id')

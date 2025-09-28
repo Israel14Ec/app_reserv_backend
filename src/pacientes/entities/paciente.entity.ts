@@ -33,7 +33,7 @@ export class Paciente {
   updatedAt: string;
 
   //Relación con usuarios 1 a 1
-  @OneToOne(() => Usuario, (usuario) => usuario.id, { eager: true })
+  @OneToOne(() => Usuario, (usuario) => usuario.id)
   @JoinColumn({ name: 'id_usuario'})
   usuario: Usuario;
 

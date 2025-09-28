@@ -8,7 +8,8 @@ export enum EstadoCita {
     PENDIENTE = 'pendiente',
     CONFIRMADA = 'confirmada',
     CANCELADA = 'cancelada',
-    COMPLETADA = 'finalizada'
+    COMPLETADA = 'finalizada',
+    CANCELADA_CLIENTE="cancelada_cliente"
 }
 
 @Entity()

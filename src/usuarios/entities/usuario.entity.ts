@@ -20,6 +20,9 @@ export class Usuario {
     @Column({type: 'varchar', length: 10, nullable: true})
     celular?: string;
 
+    @Column({type: 'varchar', length: 13})
+    ci_ruc: string;
+
     @Column({type: 'varchar', length: 100, nullable: true})
     reset_token?: string | null;
     

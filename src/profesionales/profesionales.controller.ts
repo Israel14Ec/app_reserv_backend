@@ -17,6 +17,16 @@ export class ProfesionalesController {
     return this.profesionalesService.profesionalByUserId(+id);
   }
 
+  @Get('/:id')
+  profesionalById(@Param('id') id: string) {
+    return this.profesionalesService.profesionalById(+id);
+  }
+
+  @Get()
+  profesionalGetAll() {
+    return this.profesionalesService.getAllProfesional();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProfesionaleDto: UpdateProfesionaleDto) {
     return this.profesionalesService.update(+id, updateProfesionaleDto);

@@ -118,7 +118,16 @@ export class CitasService {
       order: {
         updatedAt: 'DESC',
       },
-      relations: ['horario', 'servicio'],
+      relations: {
+        horario: true,
+        servicio: true,
+        profesional: {
+          usuario: true,
+        },
+        paciente: {
+          usuario: true,
+        },
+      },
     });
 
     return citas;
@@ -129,7 +138,16 @@ export class CitasService {
       where: {
         id,
       },
-      relations: ['horario', 'servicio', 'profesional'],
+      relations: {
+        horario: true,
+        servicio: true,
+        profesional: {
+          usuario: true,
+        },
+        paciente: {
+          usuario: true,
+        },
+      },
     });
     if (!cita) {
       throw new NotFoundException('No se enctró la cita con ese id');
@@ -193,21 +211,21 @@ export class CitasService {
   //Cambiar de estado
   async changeState(id: number, changeStateDto: ChangeStateDto) {
     const cita = await this.findOne(id);
-    cita.estado = changeStateDto.estado
-    await this.citaRepository.save(cita)
+    cita.estado = changeStateDto.estado;
+    await this.citaRepository.save(cita);
 
     return {
-      message: "Estado de la cita actualizada"
-    }
+      message: 'Estado de la cita actualizada',
+    };
   }
 
   async remove(id: number) {
-    const cita = await this.findOne(id)
-    await this.citaRepository.remove(cita)
+    const cita = await this.findOne(id);
+    await this.citaRepository.remove(cita);
 
     return {
       data: cita,
-      message: "Cita eliminada"
-    }
+      message: 'Cita eliminada',
+    };
   }
 }

@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { EmailsService } from 'src/emails/emails.service';
+import { PacientesService } from 'src/pacientes/pacientes.service';
+import { ProfesionalesService } from 'src/profesionales/profesionales.service';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { IniciarSesionDto } from './dto/iniciar-sesion.dto';
@@ -19,6 +21,8 @@ export class AuthService {
   constructor(
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
+    private readonly pacienteService : PacientesService,
+    private readonly profesionalService : ProfesionalesService,
     private readonly jwtService: JwtService,
     private readonly emailService: EmailsService,
   ) {}
@@ -64,7 +68,7 @@ export class AuthService {
     await this.usuarioRepository.save(user);
 
     //Enviar email con el token
-    const url = `${process.env.FRONT_URL}/${token}`;
+    const url = `${process.env.FRONT_URL}/auth/reset-password/${token}`;
     this.emailService.enviarEmailRecuperCuenta(user.nombre, user.email, url);
 
     return {
@@ -93,23 +97,34 @@ export class AuthService {
   }
 
   // Obtener usuario por el token
-  async getUserFromToken(token: string): Promise<Usuario> {
+  async getUserFromToken(token: string) {
     try {
       const { user_id } = await this.jwtService.verifyAsync(token, {
         secret: process.env.SECRET_JWT,
       });
 
-      const user = await this.usuarioRepository.findOne({ 
+      const usuario = await this.usuarioRepository.findOne({ 
           where: {
             id: user_id 
           }
         });
 
-      if (!user) {
+      //Buscar el id en Paciente y profesional
+      
+      if (!usuario) {
         throw new NotFoundException('Usuario no encontrado');
       }
 
-      return user;
+      const paciente = await this.pacienteService.pacienteByUserId(usuario.id)
+      const profesional = await this.profesionalService.profesionalByUserId(usuario.id)
+      const tipo_usuario = paciente ? "paciente" : "profesional"
+      
+      return {
+        paciente,
+        profesional,
+        tipo_usuario,
+        usuario
+      }
     } catch (error) {
       throw new UnauthorizedException('Token inválido o expirado');
     }

@@ -10,20 +10,21 @@ import { UsuariosService } from 'src/usuarios/usuarios.service';
 export class PacientesService {
   constructor(
     @InjectRepository(Paciente)
-    private readonly pacienteService: Repository<Paciente>,
+    private readonly pacienteRepository: Repository<Paciente>,
     private readonly usuarioService: UsuariosService,
   ) {}
 
   async create(createPacienteDto: CreatePacienteDto) {
-    const { name, email, password, celular, ...rest } = createPacienteDto;
+    const { name, email, password, celular, ci_ruc, ...rest } = createPacienteDto;
     const newUser = await this.usuarioService.create({
       name,
       email,
       password,
       celular,
+      ci_ruc
     });
 
-    const paciente = await this.pacienteService.save({
+    const paciente = await this.pacienteRepository.save({
       ...rest,
       usuario: { id: newUser.data.id },
     });
@@ -38,21 +39,22 @@ export class PacientesService {
   }
 
   async pacienteByUserId(id: number) {
-    const paciente = await this.pacienteService.findOne({
+    const paciente = await this.pacienteRepository.findOne({
       where: { usuario: { id } },
     });
-
-    if (!paciente) {
-      throw new NotFoundException(
-        'No se encontro un profesional con ese ID de usuario',
-      );
-    }
-
     return paciente;
   }
 
+  async getAllPaciente () {
+    return this.pacienteRepository.find({
+      relations: {
+        usuario: true
+      }
+    })
+  }
+
   async pacienteById(id: number) {
-    const paciente = await this.pacienteService.findOneBy({ id });
+    const paciente = await this.pacienteRepository.findOneBy({ id });
 
     if (!paciente) {
       throw new NotFoundException('No se encontro un paciente con ese ID');
@@ -72,7 +74,7 @@ export class PacientesService {
 
     // Actualizar paciente
     Object.assign(paciente, rest);
-    const updatedProfesional = await this.pacienteService.save(paciente);
+    const updatedProfesional = await this.pacienteRepository.save(paciente);
 
     return {
       message: 'Paciente actualizado correctamente',

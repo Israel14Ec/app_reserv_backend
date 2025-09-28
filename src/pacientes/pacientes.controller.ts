@@ -17,6 +17,11 @@ export class PacientesController {
     return this.pacientesService.pacienteByUserId(+id);
   }
 
+  @Get()
+  pacienteAll() {
+    return this.pacientesService.getAllPaciente();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePacienteDto: UpdatePacienteDto) {
     return this.pacientesService.update(+id, updatePacienteDto);

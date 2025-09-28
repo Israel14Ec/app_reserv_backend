@@ -6,6 +6,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -53,6 +54,6 @@ export class Horario {
     profesional: Profesional;
 
     //Relación 1 a N con citas
-    @ManyToOne(() => Cita, (cita) => cita.horario)
+    @OneToMany(() => Cita, (cita) => cita.horario)
     citas: Cita[];
 }

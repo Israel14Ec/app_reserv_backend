@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, Matches, MaxLength } from "class-validator";
 
 export class CreateUsuarioDto {
 
@@ -18,5 +18,9 @@ export class CreateUsuarioDto {
     password: string;
 
     @IsOptional()
-    celular: string;
+    celular?: string;
+
+    @IsNotEmpty({message: "Ingrese el ruc o ci"})
+    @Matches(/^\d{10}$|^\d{13}$/, {message: 'La cédula debe tener 10 dígitos o el RUC 13 dígitos',})
+    ci_ruc: string;
 }
